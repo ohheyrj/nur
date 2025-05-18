@@ -2,8 +2,11 @@
   stdenvNoCC,
   fetchurl,
   undmg,
-  lib
+  lib,
+  stdenv
 }:
+
+if !stdenv.isDarwin then null else
 
 let
   version = "2.5.3";
