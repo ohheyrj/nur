@@ -6,8 +6,6 @@
   stdenv
 }:
 
-if !stdenv.isDarwin then null else
-
 let
   version = "2.5.3";
 in
@@ -44,5 +42,6 @@ stdenvNoCC.mkDerivation {
       license = lib.licenses.mit;
       platforms = lib.platforms.darwin;
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      broken = !stdenv.isDarwin;
     };
 }
