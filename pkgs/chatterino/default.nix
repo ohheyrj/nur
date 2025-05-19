@@ -36,12 +36,13 @@ stdenvNoCC.mkDerivation {
     mv Chatterino.app $out/Applications
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://chatterino.com";
       changelog = "https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md";
-      maintainers = [ maintainers.ohheyrj ];
+      maintainers = with lib.maintainers; [ ohheyrj ];
       description = "Chat client for Twitch";
-      license = licenses.mit;
-      platforms = platforms.darwin;
+      license = lib.licenses.mit;
+      platforms = lib.platforms.darwin;
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     };
 }
