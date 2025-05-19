@@ -41,7 +41,7 @@ jobs:
         runsOn:
           - ubuntu-latest
           - macos-latest
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runsOn }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
