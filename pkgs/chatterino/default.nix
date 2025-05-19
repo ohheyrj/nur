@@ -37,7 +37,6 @@ stdenvNoCC.mkDerivation {
     meta = {
       homepage = "https://chatterino.com";
       changelog = "https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md";
-      maintainers = with lib.maintainers; [ ohheyrj ];
       description = "Chat client for Twitch";
       license = lib.licenses.mit;
       platforms = lib.platforms.darwin;
