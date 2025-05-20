@@ -13,6 +13,9 @@ jobs:
   update-readme:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -26,14 +29,11 @@ jobs:
         run: python .github/scripts/update_readme_table.py
 
       - name: Commit and push if README changed
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add README.md
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "docs(README.md): Update package table in README"
-            git push
-          fi
-
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs(README.md): Update package table in README"
+          file_pattern: "README.md"
+          commit_user_name: "github-actions"
+          commit_user_email: "github-actions@github.com"
+          commit_author: "GitHub Actions Bot <github-actions@github.com>"
+          token: ${{ secrets.GITHUB_TOKEN }}
