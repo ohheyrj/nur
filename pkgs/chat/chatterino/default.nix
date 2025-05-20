@@ -6,23 +6,15 @@
   stdenv
 }:
 
-let
-  version = "2.5.3";
-in
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "chatterino";
-  inherit version;
+  version = "2.5.3";
 
   src = fetchurl {
-    url = "https://chatterino.fra1.digitaloceanspaces.com/bin/${version}/Chatterino.dmg";
+    url = "https://chatterino.fra1.digitaloceanspaces.com/bin/${finalAttrs.version}/Chatterino.dmg";
     hash = "sha256-pTAw2Ko1fcYxWhQK9j0odQPn28I1Lw2CHLs21KCbo7g=";
   };
-
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
-  dontFixup = true;
 
   buildInputs = [ undmg ];
 
@@ -43,4 +35,4 @@ stdenvNoCC.mkDerivation {
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       broken = !stdenv.isDarwin;
     };
-}
+})
