@@ -22,4 +22,27 @@ These packages are available via nur.
 - 📦 PR & tracker links (if submitted upstream)
 
 <!--table:start-->
+
+## 📦 Packages by Category
+
+
+
+### 🗂️ Table of Contents
+
+- [💬 Chat](#chat)
+
+
+
+## 💬 Chat
+
+
+### 🧰 chatterino `v2.5.3`
+- 💡 **Description:** Chat client for Twitch
+- 🛡️ **License:** unknown
+- 🖥️ **Platforms:** unknown
+- 🌐 **Homepage:** [chatterino Website](https://chatterino.com)
+- 📄 **Changelog:** [CHANGELOG](https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md)
+
+
+
 <!--table:end-->
