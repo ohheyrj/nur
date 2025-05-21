@@ -1,19 +1,32 @@
-# This file describes your repository contents.
-# It should return a set of nix derivations
-# and optionally the special attributes `lib`, `modules` and `overlays`.
-# It should NOT import <nixpkgs>. Instead, you should take pkgs as an argument.
-# Having pkgs default to <nixpkgs> is fine though, and it lets you use short
-# commands such as:
-#     nix-build -A mypackage
 
 { pkgs ? import <nixpkgs> { } }:
 
-{
-  # The `lib`, `modules`, and `overlays` names are special
-  lib = import ./lib { inherit pkgs; }; # functions
-  modules = import ./modules; # NixOS modules
-  overlays = import ./overlays; # nixpkgs overlays
+let
+  inherit (pkgs) lib stdenv;
 
-  chatterino = pkgs.callPackage ./pkgs/chat/chatterino {};
-  kobo-desktop = pkgs.callPackage ./pkgs/media/kobo-desktop {};
-}
+  # Helper to find all default.nix files in ./pkgs
+  discoverPackages = dir:
+    lib.pipe (builtins.readDir dir) [
+      (lib.filterAttrs (_: type: type == "directory"))
+      (lib.mapAttrsToList (name: _: 
+        let path = "${dir}/${name}/default.nix";
+        in if builtins.pathExists path then { inherit name path; } else null))
+      (lib.filter (x: x != null))
+    ];
+
+  # Load and optionally skip non-darwin packages
+  loadPackages = packages:
+    lib.genAttrs (map (x: x.name) packages) (name:
+      let drv = pkgs.callPackage (builtins.getAttr name (lib.genAttrs (map (x: x.name) packages) (n: builtins.getAttr n (lib.listToAttrs packages)))) {};
+      in if lib.elem stdenv.hostPlatform.system drv.meta.platforms or [ ] then drv else null
+    );
+
+  packageDirs = discoverPackages ./pkgs;
+  loaded = loadPackages packageDirs;
+in
+{
+  lib = import ./lib { inherit pkgs; };
+  modules = import ./modules;
+  overlays = import ./overlays;
+} // lib.filterAttrs (_: v: v != null) loaded
+
