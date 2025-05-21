@@ -4,7 +4,13 @@
 let
   inherit (pkgs) lib stdenv;
 
-  # Recursively find all ./pkgs/**/default.nix files
+  packageOverrides = {
+    versionCheckHook = pkgs.versionCheckHook;
+    _7zz = pkgs._7zz or pkgs.sevenZip; # fallback if using older nixpkgs
+    writeShellScript = pkgs.writeShellScriptBin or pkgs.writeShellScript;
+    xcbuild = pkgs.xcbuild;
+  };
+
   findDefaultNixFiles = path:
     lib.flatten (lib.mapAttrsToList (name: type:
       let fullPath = "${toString path}/${name}";
@@ -15,14 +21,13 @@ let
 
   defaultNixFiles = findDefaultNixFiles ./pkgs;
 
-  # Turn file path into attribute name (e.g. pkgs/chat/chatterino → chatterino)
   deriveName = path:
     builtins.baseNameOf (toString (builtins.dirOf path));
 
   rawPackages = lib.genAttrs (map deriveName defaultNixFiles) (name:
     let
       file = lib.findFirst (p: deriveName p == name) null defaultNixFiles;
-      drv = pkgs.callPackage file {};
+      drv = pkgs.callPackage file packageOverrides;
     in
       if lib.elem stdenv.hostPlatform.system (drv.meta.platforms or []) then drv else null
   );
