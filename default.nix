@@ -4,29 +4,34 @@
 let
   inherit (pkgs) lib stdenv;
 
-  # Helper to find all default.nix files in ./pkgs
-  discoverPackages = dir:
-    lib.pipe (builtins.readDir dir) [
-      (lib.filterAttrs (_: type: type == "directory"))
-      (lib.mapAttrsToList (name: _: 
-        let path = "${dir}/${name}/default.nix";
-        in if builtins.pathExists path then { inherit name path; } else null))
-      (lib.filter (x: x != null))
-    ];
+  # Recursively find all ./pkgs/**/default.nix files
+  findDefaultNixFiles = path:
+    lib.flatten (lib.mapAttrsToList (name: type:
+      let fullPath = "${toString path}/${name}";
+      in if type == "directory" then findDefaultNixFiles fullPath
+         else if name == "default.nix" then [ fullPath ]
+         else []
+    ) (builtins.readDir path));
 
-  # Load and optionally skip non-darwin packages
-  loadPackages = packages:
-    lib.genAttrs (map (x: x.name) packages) (name:
-      let drv = pkgs.callPackage (builtins.getAttr name (lib.genAttrs (map (x: x.name) packages) (n: builtins.getAttr n (lib.listToAttrs packages)))) {};
-      in if lib.elem stdenv.hostPlatform.system drv.meta.platforms or [ ] then drv else null
-    );
+  defaultNixFiles = findDefaultNixFiles ./pkgs;
 
-  packageDirs = discoverPackages ./pkgs;
-  loaded = loadPackages packageDirs;
-in
-{
+  # Turn file path into attribute name (e.g. pkgs/chat/chatterino → chatterino)
+  deriveName = path:
+    builtins.baseNameOf (toString (builtins.dirOf path));
+
+  rawPackages = lib.genAttrs (map deriveName defaultNixFiles) (name:
+    let
+      file = lib.findFirst (p: deriveName p == name) null defaultNixFiles;
+      drv = pkgs.callPackage file {};
+    in
+      if lib.elem stdenv.hostPlatform.system (drv.meta.platforms or []) then drv else null
+  );
+
+  filteredPackages = lib.filterAttrs (_: v: v != null) rawPackages;
+
+in {
   lib = import ./lib { inherit pkgs; };
   modules = import ./modules;
   overlays = import ./overlays;
-} // lib.filterAttrs (_: v: v != null) loaded
+} // filteredPackages
 
