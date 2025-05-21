@@ -13,6 +13,7 @@
       overlays = import ./overlays;         # nixpkgs overlays
 
       chatterino = callPackage ./pkgs/chat/chatterino {};
+      kobo-desktop = callPackage ./pkgs/media/kobo-desktop {};
     };
 }
 
