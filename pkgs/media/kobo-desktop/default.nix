@@ -6,7 +6,7 @@
   stdenv,
   versionCheckHook,
   writeShellScript,
-
+  xcbuild
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
