@@ -3,7 +3,10 @@
   undmg,
   fetchurl,
   lib,
-  stdenv
+  stdenv,
+  versionCheckHook,
+  writeShellScript,
+
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
