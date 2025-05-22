@@ -3,6 +3,13 @@
 let
   inherit (pkgs) lib stdenv;
 
+  # Shared overrides to inject into every package
+  sharedOverrides = {
+    versionCheckHook = pkgs.versionCheckHook;
+    writeShellScript = pkgs.writeShellScriptBin or pkgs.writeShellScript;
+    xcbuild = pkgs.xcbuild;
+  };
+
   # Function to recursively find all default.nix files in pkgs/
   findPackages = dir:
     let
@@ -39,8 +46,8 @@ let
       tryEval = builtins.tryEval (
         let
           packageFn = import path;
-          # Call with pkgs to get the derivation
-          evalPkg = pkgs.callPackage packageFn {};
+          # Call with pkgs + overrides to get the derivation
+          evalPkg = pkgs.callPackage packageFn sharedOverrides;
         in
           evalPkg.meta.platforms or []
       );
@@ -57,9 +64,9 @@ let
     in lib.elem stdenv.hostPlatform.system platforms
   ) discoveredPackages;
 
-  # Build the compatible packages using callPackage which handles dependency injection
+  # Build the compatible packages using callPackage with shared overrides
   builtPackages = lib.mapAttrs (name: path:
-    pkgs.callPackage path {}
+    pkgs.callPackage path sharedOverrides
   ) compatiblePackages;
 
 in {
