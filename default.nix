@@ -4,9 +4,9 @@
 let
   inherit (pkgs) lib stdenv;
 
+  # Shared arguments to inject into every package
   sharedOverrides = {
     versionCheckHook = pkgs.versionCheckHook;
-    _7zz = pkgs._7zz or pkgs.sevenZip;
     writeShellScript = pkgs.writeShellScriptBin or pkgs.writeShellScript;
     xcbuild = pkgs.xcbuild;
   };
@@ -14,9 +14,10 @@ let
   maybeEnable = drv:
     if lib.elem stdenv.hostPlatform.system (drv.meta.platforms or []) then drv else null;
 
-  openaudible = maybeEnable (pkgs.callPackage ./pkgs/media/openaudible sharedOverrides);
-  chatterino  = maybeEnable (pkgs.callPackage ./pkgs/chat/chatterino {});
-  kobo-desktop = maybeEnable (pkgs.callPackage ./pkgs/media/kobo-desktop sharedOverrides);
+  # Now call every package with the shared overrides
+  openaudible   = maybeEnable (pkgs.callPackage ./pkgs/openaudible sharedOverrides);
+  chatterino    = maybeEnable (pkgs.callPackage ./pkgs/chat/chatterino sharedOverrides);
+  kobo-desktop  = maybeEnable (pkgs.callPackage ./pkgs/media/kobo-desktop sharedOverrides);
 
 in {
   lib = import ./lib { inherit pkgs; };
