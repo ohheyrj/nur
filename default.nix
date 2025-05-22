@@ -14,14 +14,15 @@ let
   maybeEnable = drv:
     if lib.elem stdenv.hostPlatform.system (drv.meta.platforms or []) then drv else null;
 
-  openaudible = maybeEnable (pkgs.callPackage ./pkgs/openaudible sharedOverrides);
+  openaudible = maybeEnable (pkgs.callPackage ./pkgs/media/openaudible sharedOverrides);
   chatterino  = maybeEnable (pkgs.callPackage ./pkgs/chat/chatterino {});
+  kobo-desktop = maybeEnable (pkgs.callPackage ./pkgs/media/kobo-desktop sharedOverrides);
 
 in {
   lib = import ./lib { inherit pkgs; };
   modules = import ./modules;
   overlays = import ./overlays;
 } // lib.filterAttrs (_: v: v != null) {
-  inherit openaudible chatterino;
+  inherit openaudible chatterino kobo-desktop;
 }
 
