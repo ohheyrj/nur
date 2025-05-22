@@ -15,7 +15,7 @@ let
     if lib.elem stdenv.hostPlatform.system (drv.meta.platforms or []) then drv else null;
 
   # Now call every package with the shared overrides
-  openaudible   = maybeEnable (pkgs.callPackage ./pkgs/openaudible sharedOverrides);
+  openaudible   = maybeEnable (pkgs.callPackage ./pkgs/media/openaudible sharedOverrides);
   chatterino    = maybeEnable (pkgs.callPackage ./pkgs/chat/chatterino sharedOverrides);
   kobo-desktop  = maybeEnable (pkgs.callPackage ./pkgs/media/kobo-desktop sharedOverrides);
 
