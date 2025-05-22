@@ -1,14 +1,7 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import <nixpkgs> { config.allowUnfree = true; } }:
 
 let
   inherit (pkgs) lib stdenv;
-
-  # Shared overrides to inject into every package
-  sharedOverrides = {
-    versionCheckHook = pkgs.versionCheckHook;
-    writeShellScript = pkgs.writeShellScriptBin or pkgs.writeShellScript;
-    xcbuild = pkgs.xcbuild;
-  };
 
   # Function to recursively find all default.nix files in pkgs/
   findPackages = dir:
@@ -23,14 +16,12 @@ let
       
       # Recursively search subdirectories
       subPackages = lib.concatMapAttrs (name: _: 
-        lib.mapAttrs' (subName: subPath: 
-          lib.nameValuePair "${name}-${subName}" subPath
-        ) (findPackages (dir + "/${name}"))
+        findPackages (dir + "/${name}")
       ) subdirs;
       
     in
       if hasDefault then
-        # This directory is a package
+        # This directory is a package - use just the directory name
         { ${baseNameOf (toString dir)} = dir; } // subPackages
       else
         # This directory is not a package, just return subdirectory results
@@ -46,8 +37,7 @@ let
       tryEval = builtins.tryEval (
         let
           packageFn = import path;
-          # Call with pkgs + overrides to get the derivation
-          evalPkg = pkgs.callPackage packageFn sharedOverrides;
+          evalPkg = pkgs.callPackage packageFn {};
         in
           evalPkg.meta.platforms or []
       );
@@ -64,9 +54,9 @@ let
     in lib.elem stdenv.hostPlatform.system platforms
   ) discoveredPackages;
 
-  # Build the compatible packages using callPackage with shared overrides
+  # Build the compatible packages
   builtPackages = lib.mapAttrs (name: path:
-    pkgs.callPackage path sharedOverrides
+    pkgs.callPackage path {}
   ) compatiblePackages;
 
 in {
