@@ -4,19 +4,12 @@
 let
   inherit (pkgs) lib stdenv;
 
-  sharedOverrides = {
-    versionCheckHook = pkgs.versionCheckHook;
-    _7zz = pkgs._7zz or pkgs.sevenZip;
-    writeShellScript = pkgs.writeShellScriptBin or pkgs.writeShellScript;
-    xcbuild = pkgs.xcbuild;
-  };
-
   maybeEnable = drv:
     if lib.elem stdenv.hostPlatform.system (drv.meta.platforms or []) then drv else null;
 
-  openaudible = maybeEnable (pkgs.callPackage ./pkgs/media/openaudible sharedOverrides);
+  openaudible = maybeEnable (pkgs.callPackage ./pkgs/media/openaudible {});
   chatterino  = maybeEnable (pkgs.callPackage ./pkgs/chat/chatterino {});
-  kobo-desktop = maybeEnable (pkgs.callPackage ./pkgs/media/kobo-desktop sharedOverrides);
+  kobo-desktop = maybeEnable (pkgs.callPackage ./pkgs/media/kobo-desktop {});
 
 in {
   lib = import ./lib { inherit pkgs; };
