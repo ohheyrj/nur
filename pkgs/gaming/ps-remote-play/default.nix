@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchurl, _7zz, cpio, xar, xcbuild, versionCheckHook, writeShellScript, lib }:
+{ stdenvNoCC, fetchurl, _7zz, cpio, xar, xcbuild, versionCheckHook, writeShellScript, lib, config }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ps-remote-play";
