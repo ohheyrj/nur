@@ -40,7 +40,6 @@ jobs:
           - nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-24.11.tar.gz
         runsOn:
           - ubuntu-latest
-          - macos-latest
     runs-on: ${{ matrix.runsOn }}
     steps:
       - name: Checkout repository

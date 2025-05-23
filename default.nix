@@ -1,5 +1,4 @@
-{ pkgs ? import <nixpkgs> { config.allowUnfree = true; } }:
-
+{ pkgs ? import <nixpkgs> { } }:
 {
   # If you have lib, modules, overlays (optional)
   lib = import ./lib { inherit pkgs; };
