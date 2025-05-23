@@ -42,4 +42,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     broken = !(config.allowUnfree or false);
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})
