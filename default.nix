@@ -11,4 +11,5 @@ rec {
   kobo-desktop = pkgs.callPackage ./pkgs/media/kobo-desktop { };
   openaudible = lib.callPackage "openaudible" ./pkgs/media/openaudible;
   ps-remote-play = pkgs.callPackage ./pkgs/gaming/ps-remote-play { };
+  alfred5 = pkgs.callPackage ./pkgs/utilities/alfred5 { };
 }
