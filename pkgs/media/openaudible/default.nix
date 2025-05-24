@@ -1,23 +1,17 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
   undmg,
   versionCheckHook,
   xcbuild,
   writeShellScript,
   _7zz,
-  config
+  config,
+  generated
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs:{
-  pname = "OpenAudible";
-  version = "4.5.3";
-
-  src = fetchurl {
-    url = "https://openaudible.org/latest/OpenAudible.dmg";
-    hash = "sha256-AHr7uOwyPhWX8Qm0X1n/eGbP5MYcCe4+wSFQyPkR9w8=";
-  };
+  inherit (generated) pname version src;
 
   dontUnpack = true;
 
