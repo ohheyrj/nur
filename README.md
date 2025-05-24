@@ -62,11 +62,12 @@ These packages are available via nur.
 - 🖥️ **Platforms:** darwin
 - 🌐 **Homepage:** [kobo-desktop Website](https://www.kobo.com/gb/en/p/desktop)
 
-### 🧰 OpenAudible `v4.5.3`
+### 🧰 openaudible `v4.5.3`
 - 💡 **Description:** OpenAudible is a cross-platform desktop app that lets Audible users download, convert, and manage their audiobooks in MP3 or M4B formats for offline listening.
-- 🛡️ **License:** unfree
+- 🛡️ **License:** asl20
 - 🖥️ **Platforms:** darwin
-- 🌐 **Homepage:** [OpenAudible Website](https://openaudible.org/)
+- 🔄 **Auto-updated:** Uses nvfetcher for version management
+- 🌐 **Homepage:** [openaudible Website](https://openaudible.org/)
 - 📄 **Changelog:** [CHANGELOG](https://openaudible.org/versions)
 
 </details>
