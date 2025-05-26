@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs:{
     homepage = "https://openaudible.org/";
     changelog = "https://openaudible.org/versions";
     description = "OpenAudible is a cross-platform desktop app that lets Audible users download, convert, and manage their audiobooks in MP3 or M4B formats for offline listening.";
-    license = lib.licenses.unfree;
+    license = lib.licenses.asl20;
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     broken = !(config.allowUnfree or false);
