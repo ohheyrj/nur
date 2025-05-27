@@ -26,12 +26,28 @@
       sha256 = "sha256-pTAw2Ko1fcYxWhQK9j0odQPn28I1Lw2CHLs21KCbo7g=";
     };
   };
+  cryptomator = {
+    pname = "cryptomator";
+    version = "1.16.2";
+    src = fetchurl {
+      url = "https://github.com/cryptomator/cryptomator/releases/download/1.16.2/Cryptomator-1.16.2-arm64.dmg";
+      sha256 = "sha256-ENYGW4eX2jtrokjy2FT/TJ+Iu7H/0a74O6d0QIz5FkE=";
+    };
+  };
   garmin-basecamp = {
     pname = "garmin-basecamp";
     version = "4813";
     src = fetchurl {
       url = "https://download.garmin.com/software/BaseCampforMac_4813.dmg";
       sha256 = "sha256-5M209u+JpwnRl+AnOgb5lbtLNUJTjw8+R0O/yFznTgs=";
+    };
+  };
+  handbrake = {
+    pname = "handbrake";
+    version = "1.9.2";
+    src = fetchurl {
+      url = "https://github.com/HandBrake/HandBrake/releases/download/1.9.2/HandBrake-1.9.2.dmg";
+      sha256 = "sha256-YaV8UzEaDKI+WDZ/USE0r5lCjBSsOmJmXyRfxeRsN5E=";
     };
   };
   openaudible = {
