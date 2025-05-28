@@ -20,6 +20,7 @@ in
 stdenvNoCC.mkDerivation {
   pname = "komiser";
   inherit (generated) version src;
+
   sourceRoot = ".";
   dontUnpack = true;
 
