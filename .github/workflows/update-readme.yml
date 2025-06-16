@@ -40,7 +40,7 @@ jobs:
 
       - name: Commit and push if README changed
         if: steps.readme-check.outputs.changed == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "docs(README.md): Update package table in README"
           file_pattern: "README.md"
